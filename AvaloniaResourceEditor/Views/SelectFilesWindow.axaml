@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:AvaloniaResourceEditor.ViewModels"
+        xmlns:converters="clr-namespace:AvaloniaResourceEditor.Views.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaResourceEditor.Views.SelectFilesWindow"
+        Title="SelectFilesWindow"
+        x:DataType="viewModels:SelectFilesViewModel">
+    <Design.DataContext>
+        <viewModels:SelectFilesViewModel/>
+    </Design.DataContext>
+    <Window.Styles>
+        <Style Selector="Window">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="HotPink"/>
+        </Style>
+    </Window.Styles>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel
+                DockPanel.Dock="Left"
+                Orientation="Vertical">
+                <Button
+                    Content="Обрати теку"
+                    Command="{Binding BrowseFolder}"/>
+                <Button
+                    Content="Прочитати"
+                    Command="{Binding Read}"/>
+            </StackPanel>
+            <TextBox Text="{Binding Folder, Mode=TwoWay}"/>
+        </DockPanel>
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Orientation="Horizontal">
+            <Button Content="Прийняти" Command="{Binding Confirm}" Click="OnCancel"/>
+            <Button Content="Скасувати" Click="OnCancel"/>
+        </StackPanel>
+        <ListBox 
+            SelectionMode="Multiple"
+            ItemsSource="{Binding AllFiles}"
+            SelectedItems="{Binding SelectedFiles}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ., Converter={x:Static converters:FuncConverters.PathToFileNameConverter}}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+        </ListBox>    
+    </DockPanel>
+</Window>
