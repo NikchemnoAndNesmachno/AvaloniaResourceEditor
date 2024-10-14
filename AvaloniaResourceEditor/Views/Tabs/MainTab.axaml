@@ -61,9 +61,9 @@
                             Content="Колір"/>
                     </UniformGrid>
                 </StackPanel>
-                <ItemsControl
+                <ListBox
                     ItemsSource="{Binding Keys}">
-                    <ItemsControl.ItemTemplate>
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <DockPanel x:DataType="models:ITagValue">
                                 <Button 
@@ -74,8 +74,8 @@
                                 <TextBox Text="{Binding Key }"/>
                             </DockPanel>
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </DockPanel>
             <ListBox
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
