@@ -2,10 +2,11 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using AvaloniaResourceEditor.Services;
+using AvaloniaResourceEditor.ViewModels;
 
 namespace AvaloniaResourceEditor.Views.ServiceImplementation;
 
-public class FileService(SelectFilesWindow window): IFileService
+public class FileService(MainWindow window): IFileService
 {
     public async Task<string> GetFolder()
     {

@@ -4,9 +4,9 @@ using AvaloniaResourceEditor.Models;
 
 namespace AvaloniaResourceEditor.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainViewModel : ViewModelBase
 {
-    public MainWindowViewModel(SelectFilesViewModel vm)
+    public MainViewModel(SelectFilesViewModel vm)
     {
         SelectFilesViewModel = vm;
         vm.OnConfirm = Read;

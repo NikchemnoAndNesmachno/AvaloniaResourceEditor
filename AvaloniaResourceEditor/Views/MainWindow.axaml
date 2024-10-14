@@ -6,128 +6,22 @@
         xmlns:models="clr-namespace:AvaloniaResourceEditor.Models"
         xmlns:converters="clr-namespace:AvaloniaResourceEditor.Views.Converters"
         xmlns:dataTemplates="clr-namespace:AvaloniaResourceEditor.Views.DataTemplates"
+        xmlns:tabs="clr-namespace:AvaloniaResourceEditor.Views.Tabs"
+        xmlns:viewModels="clr-namespace:AvaloniaResourceEditor.ViewModels"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
         x:Class="AvaloniaResourceEditor.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        x:Name="ContextWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaResourceEditor">
-
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    <Window.Resources>
-        <converters:ColorConverter x:Key="ColorConverter"/>
-    </Window.Resources>
-    <Window.Styles>
-        <Style Selector="Window">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style Selector="ListBox">
-            <Setter Property="Padding" Value="0"/>
-        </Style>
-        <Style Selector="ListBoxItem">
-            <Setter Property="Padding" Value="0"/>
-        </Style>
-        <Style Selector="StackPanel">
-            <Setter Property="Spacing" Value="0"/>
-        </Style>
-        <Style Selector="Button">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        </Style>
-        <Style Selector="UniformGrid">
-            <Setter Property="Rows" Value="1"/>
-        </Style>
-    </Window.Styles>
-    <DockPanel>
-        <StackPanel 
-            DockPanel.Dock="Top"
-            Orientation="Horizontal">
-            <Button Content="Знайти" Click="OpenBrowse"/>
-            <Button Content="Зчитати" Command="{Binding Read}"/>
-            <Button Content="Зберегти" Command="{Binding Save}"/>
-        </StackPanel>
-        <DockPanel>
-            <DockPanel DockPanel.Dock="Left">
-                <StackPanel
-                    x:Name="AddPanel"
-                    DockPanel.Dock="Top">
-                    <Button 
-                        x:Name="SampleButton"
-                        Command="{Binding CreateResource}"
-                        Content="Додати ресурс"/>
-                    <UniformGrid>
-                        <Button 
-                            Command="{Binding AddStringKey}"
-                            Content="Рядок"/>
-                        <Button 
-                            Command="{Binding AddBrushKey}"
-                            Content="Колір"/>
-                    </UniformGrid>
-                </StackPanel>
-                <ItemsControl
-                    ItemsSource="{Binding Keys}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel x:DataType="models:ITagValue">
-                                <Button 
-                                    DockPanel.Dock="Right"
-                                    Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).RemoveKey}"
-                                    CommandParameter="{Binding}"
-                                    Content="-"/>
-                                <TextBox Text="{Binding Key }"/>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </DockPanel>
-            <ItemsControl
-                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding Resources}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="models:IResource">
-                        <DockPanel>
-                            <StackPanel
-                                DockPanel.Dock="Top"
-                                Height="{Binding #AddPanel.Bounds.Height}"
-                                Orientation="Vertical">
-                                <TextBox
-                                    Text="{Binding Name}"/>
-                                <UniformGrid>
-                                    <Button
-                                        Content="Д"
-                                        Command="{Binding  $parent[Window].((vm:MainWindowViewModel)DataContext).DuplicateResource}"
-                                        CommandParameter="{Binding}"/>
-                                    <Button 
-                                        Content="-"
-                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).RemoveResource}"
-                                        CommandParameter="{Binding}"/>    
-                                </UniformGrid>
-                                
-                            </StackPanel>
-                            <ItemsControl ItemsSource="{Binding Values}">
-                                <ItemsControl.DataTemplates>
-                                    <dataTemplates:TagDataTemplate>
-                                        <DataTemplate x:Key="String" DataType="{x:Type vm:OTagValue}">
-                                            <TextBox Text="{Binding Value, Mode=TwoWay}"/>
-                                        </DataTemplate>
-                                        <DataTemplate x:Key="Color" DataType="{x:Type vm:OTagValue}">
-                                            <ColorPicker
-                                                Height="{Binding #SampleButton.Bounds.Height}"
-                                                Color="{Binding  Value, Mode=TwoWay, Converter={StaticResource ColorConverter}}"/>
-                                        </DataTemplate>
-                                    </dataTemplates:TagDataTemplate>    
-                                </ItemsControl.DataTemplates>
-                            </ItemsControl>
-                        </DockPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </DockPanel>
-    </DockPanel>
+        Title="AvaloniaResourceEditor"
+        x:DataType="viewModels:ShellViewModel">
+        <Design.DataContext>
+                <vm:ShellViewModel/>
+        </Design.DataContext>
+        <TabControl>
+                <TabItem Header="Редагувати">
+                        <tabs:MainTab DataContext="{Binding MainViewModel  }"/>
+                </TabItem>
+                <TabItem Header="Обрати">
+                        <tabs:SelectTab DataContext="{Binding  SelectViewModel  }"/>
+                </TabItem>
+        </TabControl>
 </Window>

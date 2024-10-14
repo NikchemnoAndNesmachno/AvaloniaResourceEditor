@@ -7,15 +7,9 @@ namespace AvaloniaResourceEditor.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindow(MainWindowViewModel vm)
+    public MainWindow(ShellViewModel vm)
     {
         InitializeComponent();
         DataContext = vm;
-    }
-
-    private void OpenBrowse(object? sender, RoutedEventArgs e)
-    {
-        var window = ServiceManager.Get<SelectFilesWindow>();
-        window.ShowDialog(this);
     }
 }

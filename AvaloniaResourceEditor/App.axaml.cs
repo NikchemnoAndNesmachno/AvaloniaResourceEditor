@@ -26,11 +26,10 @@ public partial class App : Application
             // Without this line you will get duplicate validations from both Avalonia and CT
             BindingPlugins.DataValidators.RemoveAt(0);
             ServiceManager.Services.AddSingleton<SelectFilesViewModel>();
-            ServiceManager.Services.AddSingleton<MainWindowViewModel>();
-            
-            ServiceManager.Services.AddTransient<SelectFilesWindow>();
+            ServiceManager.Services.AddSingleton<MainViewModel>();
+            ServiceManager.Services.AddSingleton<ShellViewModel>();
             ServiceManager.Services.AddSingleton<MainWindow>();
-            ServiceManager.Services.AddTransient<IFileService, FileService>();
+            ServiceManager.Services.AddSingleton<IFileService, FileService>();
             
             ServiceManager.Init();
             

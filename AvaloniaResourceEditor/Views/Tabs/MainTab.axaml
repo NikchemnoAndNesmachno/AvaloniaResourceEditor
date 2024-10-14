@@ -1,0 +1,129 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AvaloniaResourceEditor.ViewModels"
+             xmlns:converters="clr-namespace:AvaloniaResourceEditor.Views.Converters"
+             xmlns:models="clr-namespace:AvaloniaResourceEditor.Models"
+             xmlns:dataTemplates="clr-namespace:AvaloniaResourceEditor.Views.DataTemplates"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaResourceEditor.Views.Tabs.MainTab"
+             x:DataType="viewModels:MainViewModel">
+       <Design.DataContext>
+        <viewModels:MainViewModel/>
+    </Design.DataContext>
+    <UserControl.Resources>
+        <converters:ColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="Window">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="StackPanel">
+            <Setter Property="Spacing" Value="0"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="UniformGrid">
+            <Setter Property="Rows" Value="1"/>
+        </Style>
+    </UserControl.Styles>
+    <DockPanel>
+        <StackPanel 
+            DockPanel.Dock="Top"
+            Orientation="Horizontal">
+            <Button Content="Зчитати" Command="{Binding Read}"/>
+            <Button Content="Зберегти" Command="{Binding Save}"/>
+        </StackPanel>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Left">
+                <StackPanel
+                    x:Name="AddPanel"
+                    DockPanel.Dock="Top">
+                    <Button 
+                        x:Name="SampleButton"
+                        Command="{Binding CreateResource}"
+                        Content="Додати ресурс"/>
+                    <UniformGrid>
+                        <Button 
+                            Command="{Binding AddStringKey}"
+                            Content="Рядок"/>
+                        <Button 
+                            Command="{Binding AddBrushKey}"
+                            Content="Колір"/>
+                    </UniformGrid>
+                </StackPanel>
+                <ItemsControl
+                    ItemsSource="{Binding Keys}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel x:DataType="models:ITagValue">
+                                <Button 
+                                    DockPanel.Dock="Right"
+                                    Command="{Binding $parent[UserControl].((viewModels:MainViewModel)DataContext).RemoveKey}"
+                                    CommandParameter="{Binding}"
+                                    Content="-"/>
+                                <TextBox Text="{Binding Key }"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+            <ListBox
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ItemsSource="{Binding Resources}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:IResource">
+                        <DockPanel>
+                            <StackPanel
+                                DockPanel.Dock="Top"
+                                Height="{Binding #AddPanel.Bounds.Height}"
+                                Orientation="Vertical">
+                                <TextBox
+                                    Text="{Binding Name}"/>
+                                <UniformGrid>
+                                    <Button
+                                        Content="Д"
+                                        Command="{Binding  $parent[UserControl].((viewModels:MainViewModel)DataContext).DuplicateResource}"
+                                        CommandParameter="{Binding}"/>
+                                    <Button 
+                                        Content="-"
+                                        Command="{Binding $parent[UserControl].((viewModels:MainViewModel)DataContext).RemoveResource}"
+                                        CommandParameter="{Binding}"/>    
+                                </UniformGrid>
+                                
+                            </StackPanel>
+                            <ItemsControl ItemsSource="{Binding Values}">
+                                <ItemsControl.DataTemplates>
+                                    <dataTemplates:TagDataTemplate>
+                                        <DataTemplate x:Key="String" DataType="{x:Type viewModels:OTagValue}">
+                                            <TextBox Text="{Binding Value, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="Color" DataType="{x:Type viewModels:OTagValue}">
+                                            <ColorPicker
+                                                Height="{Binding #SampleButton.Bounds.Height}"
+                                                Color="{Binding  Value, Mode=TwoWay, Converter={StaticResource ColorConverter}}"/>
+                                        </DataTemplate>
+                                    </dataTemplates:TagDataTemplate>    
+                                </ItemsControl.DataTemplates>
+                            </ItemsControl>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </DockPanel>
+</UserControl>
